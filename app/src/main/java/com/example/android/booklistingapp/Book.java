@@ -1,6 +1,5 @@
 package com.example.android.booklistingapp;
 
-
 public class Book {
 
     private String mTitle;
@@ -14,7 +13,6 @@ public class Book {
         mPublisher = publisher;
         mUrl = url;
     }
-
 
     public String getTitle() {
         return mTitle;

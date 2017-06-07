@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,42 +53,30 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
         spinner = findViewById(R.id.loading_spinner);
         spinner.setVisibility(View.GONE);
-        emptyStateView.setText(R.string.search_for_books);
 
-        NetworkInfo activeNetwork = getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-
-        if (isConnected) {
+        if (isConnected()) {
             spinner.setVisibility(View.VISIBLE);
-            emptyStateView.setText("");
-
             loaderManager = getLoaderManager();
             Log.i(LOG_TAG, "test: calling initLoader()");
             loaderManager.initLoader(BOOK_LOADER_ID, null, MainActivity.this);
         } else {
-            emptyStateView.setText(R.string.no_books_found);
+            emptyStateView.setText(R.string.no_internet_connection);
         }
 
         searchButtonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 queryTitle = queryTitleView.getText().toString();
                 Log.i(LOG_TAG, "queryTitle: " + queryTitle);
 
-                NetworkInfo activeNetwork = getActiveNetworkInfo();
-                boolean isConnected = activeNetwork != null &&
-                        activeNetwork.isConnectedOrConnecting();
-
-                if (isConnected) {
+                if (isConnected()) {
                     spinner.setVisibility(View.VISIBLE);
                     emptyStateView.setText("");
+
                     Log.i(LOG_TAG, "test: calling initLoader()");
                     loaderManager.restartLoader(BOOK_LOADER_ID, null, MainActivity.this);
-
                 } else {
-                    emptyStateView.setText(R.string.no_books_found);
+                    emptyStateView.setText(R.string.no_internet_connection);
                 }
             }
         });
@@ -112,11 +99,10 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         });
     }
 
-    public NetworkInfo getActiveNetworkInfo() {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+    public boolean isConnected() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        return networkInfo;
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
     @Override
@@ -124,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         Log.i(LOG_TAG, "test: onCreateLoader() called");
 
         if (queryTitle == null || queryTitle.isEmpty()) queryTitle = "test";
-        String newUrl = BOOKS_URL + queryTitle.toLowerCase() + "&maxResults=4";
+        String newUrl = BOOKS_URL + queryTitle.toLowerCase() + "&maxResults=30";
         return new BookLoader(this, newUrl);
     }
 
@@ -142,11 +128,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         // data set. This will trigger the ListView to update.
         if (books != null && !books.isEmpty()) {
             mAdapter.addAll(books);
-
-            mAdapter.notifyDataSetChanged();
-            bookListView.invalidateViews();
-            bookListView.refreshDrawableState();
-
         } else {
             Log.i(LOG_TAG, "list of books is empty");
         }
@@ -157,5 +138,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         Log.i(LOG_TAG, "test: onLoaderReset() called");
         mAdapter.clear();
     }
+
 }
 

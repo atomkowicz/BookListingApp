@@ -4,16 +4,16 @@
 	android:layout_width="match_parent"
 	android:layout_height="?android:attr/listPreferredItemHeight"
 	android:orientation="horizontal"
-	android:paddingEnd="16dp"
-	android:paddingLeft="16dp"
-	android:paddingRight="16dp"
-	android:paddingStart="8dp">
+	android:paddingEnd="@dimen/default_padding"
+	android:paddingLeft="@dimen/default_padding"
+	android:paddingRight="@dimen/default_padding"
+	android:paddingStart="@dimen/small_padding">
 
 	<ImageView
 		android:id="@+id/cover"
-		android:layout_width="40dp"
-		android:layout_height="50dp"
-		android:layout_margin="8dp"
+		android:layout_width="@dimen/img_width"
+		android:layout_height="@dimen/img_height"
+		android:layout_margin="@dimen/small_margin"
 		android:src="@drawable/book"/>
 
 	<LinearLayout
@@ -32,7 +32,7 @@
 			android:maxLines="1"
 			android:textAllCaps="true"
 			android:textColor="@color/textColorEarthquakeDetails"
-			android:textSize="12sp"
+			android:textSize="@dimen/small_text"
 			tools:text=" J.K. Rowling"/>
 
 		<TextView
@@ -42,7 +42,7 @@
 			android:ellipsize="end"
 			android:maxLines="2"
 			android:textColor="@color/textColorEarthquakeLocation"
-			android:textSize="12sp"
+			android:textSize="@dimen/small_text"
 			tools:text="Harry Potter and the Order of the Phoenix "/>
 		<TextView
 			android:id="@+id/publisher"
@@ -50,7 +50,7 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="start"
 			android:textColor="@color/textColorEarthquakeDetails"
-			android:textSize="12sp"
-			tools:text="SP publishing house"/>
+			android:textSize="@dimen/small_text"
+			tools:text="Sample publishing house"/>
 	</LinearLayout>
 </LinearLayout>

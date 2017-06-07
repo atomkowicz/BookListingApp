@@ -1,10 +1,8 @@
 <resources>
 	<string name="app_name">BookListingApp</string>
-	<string name="no_earthquakes">No books found</string>
-	<string name="no_books_found">No internet connection</string>
+	<string name="no_books_found">No books found</string>
+	<string name="no_internet_connection">No internet connection</string>
 	<string name="search_for_books">Search for books</string>
 	<string name="action_search">Search</string>
 	<string name="type_book_title">Type book title</string>
-	<string name="title_activity_main2">Main2Activity</string>
-
 </resources>

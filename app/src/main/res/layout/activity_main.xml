@@ -27,7 +27,6 @@
 					android:id="@+id/search_title"
 					android:layout_width="0dp"
 					android:layout_weight="1"
-					android:layout_marginLeft="-5dp"
 					android:layout_height="wrap_content"
 					android:hint="@string/type_book_title"
 					android:imeOptions="actionDone"
@@ -35,10 +34,8 @@
 					android:layout_gravity="center_vertical"/>
 				<Button
 					android:id="@+id/search_button"
-					android:layout_width="30dp"
-					android:layout_height="30dp"
-					android:layout_alignParentBottom="true"
-					android:layout_centerHorizontal="true"
+					android:layout_width="@dimen/button_search_width"
+					android:layout_height="@dimen/button_search_height"
 					android:layout_margin="@dimen/fab_margin"
 					android:textColor="@color/colorAccent"
 					android:layout_gravity="center_vertical"
@@ -50,6 +47,5 @@
 	</android.support.design.widget.AppBarLayout>
 
 	<include layout="@layout/content_main"/>
-
 
 </android.support.design.widget.CoordinatorLayout>

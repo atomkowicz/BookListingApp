@@ -15,7 +15,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Helper methods related to requesting and receiving Book data from USGS.
@@ -39,12 +38,6 @@ public final class QueryUtils {
      */
     public static ArrayList<Book> fetchBookData(String requestUrl) {
 
-//        try {
-//            Thread.sleep(2000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
         Log.i(LOG_TAG, "test: fetchBookData() called");
 
         // Create URL object
@@ -58,10 +51,10 @@ public final class QueryUtils {
             Log.e(LOG_TAG, "Error closing input stream", e);
         }
 
-        // Extract relevant fields from the JSON response and create an {@link Event} object
+        // Extract relevant fields from the JSON response and create an {@link Book} object
         ArrayList<Book> Books = extractBooks(jsonResponse);
 
-        // Return the {@link Event}
+        // Return the {@link Book}
         return Books;
     }
 
@@ -92,20 +85,18 @@ public final class QueryUtils {
 
                 if (authors != null) {
                     int len = authors.length();
-                    for (int k=0;i<len;i++){
+                    for (int k = 0; i < len; i++) {
                         authorsList.add(authors.get(k).toString());
                     }
                 }
                 String author = TextUtils.join(",", authorsList);
-                String publisher = properties.getString("title");
+                String publisher = properties.getString("publisher");
 
                 // Extract the value for the key called "url"
                 String url = properties.getString("infoLink");
 
-                // Create a new {@link Book} object with the magnitude, location, time,
-                // and url from the JSON response.
+                // Create a new {@link Book} object
                 Books.add(new Book(title, author, publisher, url));
-                Log.i(LOG_TAG, "title: " + title);
             }
 
         } catch (JSONException e) {
@@ -161,9 +152,11 @@ public final class QueryUtils {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             } else {
+                // bad server response
                 Log.e("Error response code: ", Integer.toString(urlConnection.getResponseCode()));
             }
         } catch (IOException e) {
+            // unable to get any server response
             Log.e(LOG_TAG, "Problem retrieving the Book JSON results.", e);
         } finally {
             if (urlConnection != null) {
@@ -172,7 +165,6 @@ public final class QueryUtils {
             if (inputStream != null) {
                 inputStream.close();
             }
-            Log.e(LOG_TAG, "url: " + url);
         }
         return jsonResponse;
     }
