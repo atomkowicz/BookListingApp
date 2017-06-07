@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     String queryTitle;
     EditText queryTitleView;
     ListView bookListView;
+    LoaderManager loaderManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,21 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         spinner.setVisibility(View.GONE);
         emptyStateView.setText(R.string.search_for_books);
 
+        NetworkInfo activeNetwork = getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        if (isConnected) {
+            spinner.setVisibility(View.VISIBLE);
+            emptyStateView.setText("");
+
+            loaderManager = getLoaderManager();
+            Log.i(LOG_TAG, "test: calling initLoader()");
+            loaderManager.initLoader(BOOK_LOADER_ID, null, MainActivity.this);
+        } else {
+            emptyStateView.setText(R.string.no_books_found);
+        }
+
         searchButtonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,10 +85,9 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                 if (isConnected) {
                     spinner.setVisibility(View.VISIBLE);
                     emptyStateView.setText("");
-
-                    LoaderManager loaderManager = getLoaderManager();
                     Log.i(LOG_TAG, "test: calling initLoader()");
-                    loaderManager.initLoader(BOOK_LOADER_ID, null, MainActivity.this);
+                    loaderManager.restartLoader(BOOK_LOADER_ID, null, MainActivity.this);
+
                 } else {
                     emptyStateView.setText(R.string.no_books_found);
                 }
@@ -107,8 +122,9 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     @Override
     public Loader<List<Book>> onCreateLoader(int i, Bundle bundle) {
         Log.i(LOG_TAG, "test: onCreateLoader() called");
-        //queryTitle = "lord";
-        String newUrl = BOOKS_URL + queryTitle.toLowerCase() + "&maxResults=30";
+
+        if (queryTitle == null || queryTitle.isEmpty()) queryTitle = "test";
+        String newUrl = BOOKS_URL + queryTitle.toLowerCase() + "&maxResults=4";
         return new BookLoader(this, newUrl);
     }
 

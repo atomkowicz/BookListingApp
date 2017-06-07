@@ -105,6 +105,7 @@ public final class QueryUtils {
                 // Create a new {@link Book} object with the magnitude, location, time,
                 // and url from the JSON response.
                 Books.add(new Book(title, author, publisher, url));
+                Log.i(LOG_TAG, "title: " + title);
             }
 
         } catch (JSONException e) {
@@ -171,7 +172,7 @@ public final class QueryUtils {
             if (inputStream != null) {
                 inputStream.close();
             }
-            Log.e(LOG_TAG, "Problem");
+            Log.e(LOG_TAG, "url: " + url);
         }
         return jsonResponse;
     }
