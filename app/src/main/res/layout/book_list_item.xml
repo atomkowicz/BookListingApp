@@ -31,7 +31,7 @@
 			android:fontFamily="sans-serif-medium"
 			android:maxLines="1"
 			android:textAllCaps="true"
-			android:textColor="@color/textColorEarthquakeDetails"
+			android:textColor="@color/textColorPrimary"
 			android:textSize="@dimen/small_text"
 			tools:text=" J.K. Rowling"/>
 
@@ -41,7 +41,7 @@
 			android:layout_height="wrap_content"
 			android:ellipsize="end"
 			android:maxLines="2"
-			android:textColor="@color/textColorEarthquakeLocation"
+			android:textColor="@color/textColorPrimary"
 			android:textSize="@dimen/small_text"
 			tools:text="Harry Potter and the Order of the Phoenix "/>
 		<TextView
@@ -49,7 +49,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="start"
-			android:textColor="@color/textColorEarthquakeDetails"
+			android:textColor="@color/textColorSecondary"
 			android:textSize="@dimen/small_text"
 			tools:text="Sample publishing house"/>
 	</LinearLayout>

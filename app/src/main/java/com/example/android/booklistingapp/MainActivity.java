@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         bookListView.setAdapter(mAdapter);
 
         emptyStateView = (TextView) findViewById(R.id.empty);
+
         bookListView.setEmptyView(emptyStateView);
 
         queryTitleView = (EditText) findViewById(R.id.search_title);
@@ -54,11 +56,17 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         spinner = findViewById(R.id.loading_spinner);
         spinner.setVisibility(View.GONE);
 
-        if (isConnected()) {
-            spinner.setVisibility(View.VISIBLE);
+
+        // check if there is internet connection
+        ConnectivityManager cm =
+                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        if (isConnected) {
             loaderManager = getLoaderManager();
-            Log.i(LOG_TAG, "test: calling initLoader()");
-            loaderManager.initLoader(BOOK_LOADER_ID, null, MainActivity.this);
+            emptyStateView.setText(R.string.search_for_books);
         } else {
             emptyStateView.setText(R.string.no_internet_connection);
         }
@@ -67,12 +75,19 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             @Override
             public void onClick(View v) {
                 queryTitle = queryTitleView.getText().toString();
-                Log.i(LOG_TAG, "queryTitle: " + queryTitle);
+
+                if (queryTitle.isEmpty()) {
+                    Log.i(LOG_TAG, "queryTitle is empty: " + queryTitle);
+                    bookListView.setVisibility(View.GONE);
+                    emptyStateView.setVisibility(View.VISIBLE);
+                    emptyStateView.setText(R.string.fill_the_search_field);
+                    return;
+                }
 
                 if (isConnected()) {
                     spinner.setVisibility(View.VISIBLE);
                     emptyStateView.setText("");
-
+                    //loaderManager.initLoader(BOOK_LOADER_ID, null, MainActivity.this);
                     Log.i(LOG_TAG, "test: calling initLoader()");
                     loaderManager.restartLoader(BOOK_LOADER_ID, null, MainActivity.this);
                 } else {
@@ -109,7 +124,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     public Loader<List<Book>> onCreateLoader(int i, Bundle bundle) {
         Log.i(LOG_TAG, "test: onCreateLoader() called");
 
-        if (queryTitle == null || queryTitle.isEmpty()) queryTitle = "test";
         String newUrl = BOOKS_URL + queryTitle.toLowerCase() + "&maxResults=30";
         return new BookLoader(this, newUrl);
     }

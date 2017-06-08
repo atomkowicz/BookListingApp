@@ -85,7 +85,7 @@ public final class QueryUtils {
 
                 if (authors != null) {
                     int len = authors.length();
-                    for (int k = 0; i < len; i++) {
+                    for (int k = 0; k < len; k++) {
                         authorsList.add(authors.get(k).toString());
                     }
                 }
